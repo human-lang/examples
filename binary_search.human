@@ -1,0 +1,31 @@
+Context binary_search(items as Array, value as Object)
+    """ Uses a binary search algorithm to locate a value in the specified array. """
+
+    _1.2._ Init env.
+    start = 0
+    stop  = items.length - 1
+    pivot = Math.floor (start + stop) / 2
+
+    _1.2._ Loop over items.
+    change 注释
+
+
+
+
+
+
+
+
+
+__END__
+
+* 类型是必要的。as Array 作为一种在该Context里的行为**局限**。
+* Object 是特别的 Context
+* Context 是用来对付一些复杂的东西。
+* 人类在思维时，会对谈话对象启用默认推理的假设。
+* **序号** 前后用 _ ，这样强化以序号为中心，下划线可以被我们的视野几乎忽略。
+* Array里的元素可以相互比较
+* 过程式编程是可以逐步调试的，Human编程语言如何调试。
+
+
+* [传统] 缺陷是 从start, stop 到 pivot 里包含的 <, >, 还有另一个隐含的 = ，得靠推理出来。
