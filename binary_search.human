@@ -1,4 +1,4 @@
-Context binary_search(items as Array, value as Object)
+Context binary_search(items as Array, value as Object) :: Index or None
     """ Uses a binary search algorithm to locate a value in the specified array. """
 
     _1.2._ Init env.
@@ -26,6 +26,11 @@ __END__
 * **序号** 前后用 _ ，这样强化以序号为中心，下划线可以被我们的视野几乎忽略。
 * Array里的元素可以相互比较
 * 过程式编程是可以逐步调试的，Human编程语言如何调试。
+* 写一个完美的二分查找，并在代码层面表达出二分查找的核心思想。
 
 
 * [传统] 缺陷是 从start, stop 到 pivot 里包含的 <, >, 还有另一个隐含的 = ，得靠推理出来。
+* [传统] 没有显式表达出[start, stop, pivot]的依赖, 和循环对之的影响。
+
+
+* Haskell 二分查找。
