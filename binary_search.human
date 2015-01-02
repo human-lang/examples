@@ -2,18 +2,11 @@ Context binary_search(items as Array, value as Object) :: Index or None
     """ Uses a binary search algorithm to locate a value in the specified array. """
 
     _1.2._ Init env.
-    start = 0
-    stop  = items.length - 1
-    pivot = Math.floor (start + stop) / 2
+    Changeable start, stop @dep_on Array
+    Changeable pivot @dep_on(start + stop) -> Math.floor (start + stop) / 2
 
     _1.2._ Loop over items.
-    change 注释
-
-
-
-
-
-
+    描述 start, stop 如何改变
 
 
 
