@@ -6,9 +6,7 @@ Context binary_search(items as SortedArray, value as Object) :: Index or None
             start = 0, stop = items.length - 1
             pivot @dep_on(start, stop) -> Math.floor (start + stop) / 2
         cond:
-            _1_ -> items[pivot] isnt value
-            _&_
-            _2_ -> start < stop
+            start < stop
         proc:
             case items[pivot] `compare` value
             when LT -> stop  = pivot - 1
@@ -43,7 +41,8 @@ __END__
 * 序号表示顺序和层次。
 * _序号_ 是一个关于序号的 **表达式** ，实际上也类似于传统的用括号来表示优先级。=> 结构化编程。
 * 多层复杂逻辑 [或与非] 应该用序号来表示。
-* loop 的判断跳出是可以在cond或proc都可以做的，因为变量在这两个里是共享的，我们讨论时也是如此。
+* loop 有两个跳出，一个在cond，这里是用语句来替代显式break的。另一个在proc里，在判断后，直接显
+  式调用break。而cond和proc两者变量时共享的，当然，也包括了在init时。
 * 程序里任何的不清晰都是一种罪过啊。
 
 * 二分查找的主体是递归循环，并更改状态。
