@@ -1,10 +1,10 @@
-Context binary_search(items as SortedArray, value as Object) :: Index or None
-    """ Uses a binary search algorithm to locate a value in the specified array. """
+@doc""" Uses a binary search algorithm to locate a value in the specified array. """
+Context binary_search_iterate(items as SortedArray, value as Object) :: Index or None
 
     loop:
         init:
             start = 0, stop = items.length - 1
-            pivot @dep_on(start, stop) -> Math.floor (start + stop) / 2
+            pivot & [start, stop] -> Math.floor (start + stop) / 2
         cond:
             start < stop
         proc:
@@ -12,10 +12,30 @@ Context binary_search(items as SortedArray, value as Object) :: Index or None
             when LT -> stop  = pivot - 1
             when GT -> start = pivot + 1
             when EQ -> break
-    loop.eval
 
-    return pivot
+    loop.eval => loop.pivot
 
+
+@doc""" Uses a binary search algorithm to locate a value in the specified array. """
+Context binary_search_recusive(items as SortedArray, value as Object, \
+                               start as Int, stop as Int) :: Index or None
+
+    @doc"开始判断的条件"
+    _1_:
+        start ?= 0
+        stop  ?= items.length - 1
+        pivot & [start, stop] -> Math.floor (start + stop) / 2
+        if start > stop: return Nothing
+
+    @doc"改变状态，开始递归执行"
+    _2_:
+        case items[pivot] `compare` value
+        when LT -> @recusive(items, value, start, pivot - 1)
+        when GT -> @recusive(items, value, pivot + 1, stop)
+        when EQ -> pivot
+
+
+binary_search = binary_search_iterate
 
 # Test the function.
 console.log  2 is binary_search [10, 20, 30, 40, 50], 30
@@ -44,6 +64,16 @@ __END__
 * loop 有两个跳出，一个在cond，这里是用语句来替代显式break的。另一个在proc里，在判断后，直接显
   式调用break。而cond和proc两者变量时共享的，当然，也包括了在init时。
 * 程序里任何的不清晰都是一种罪过啊。
+* loop.pivot 可以访问loop内的内部变量。
+* pivot 在 loop.init里是可以被语句隐含推理出是整数类型的。
+* 代码执行顺序和传统一样，是隐含为顺序的。
+* 代码简洁的基础是不伤害解释的逻辑，并不可隐匿解释里需要强调的。
+* 程序语法都应该是扁平式的(即没有for,while,loop等循环)，只用结构来表示，但是递归呢。
+* loop 定义好后返回的是一个过程结构，需要调用 loop.eval 才能运行。
+* @doc 自动选择与其下方的，并判断type是啥，比如 Context 或者 Seq 等。
+* : 和 => 都是表示执行顺序，并隐含要执行。 : 表示结构， => 表示执行。
+* & 表示依赖求值。接受参数和函数，一旦参数发生变化，则下次调用时重新求职。
+* 用 @recusive 来强制显示表示这是一个递归函数。写出自己名字也可以，但是可以警告吧。
 
 * 二分查找的主体是递归循环，并更改状态。
 
