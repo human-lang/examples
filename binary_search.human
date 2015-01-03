@@ -3,7 +3,7 @@ Context binary_search_iterate(items as SortedArray, value as Object) :: Index or
 
     loop:
         init:
-            start = 0, stop = items.length - 1
+            [start, stop] = [0, items.length - 1]
             pivot & [start, stop] -> Math.floor (start + stop) / 2
         cond:
             start < stop
