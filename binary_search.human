@@ -1,22 +1,29 @@
-Context binary_search(items as Array, value as Object) :: Index or None
+Context binary_search(items as SortedArray, value as Object) :: Index or None
     """ Uses a binary search algorithm to locate a value in the specified array. """
 
-    _1.2._ Init env.
-    val start = 0, stop = items.length - 1
-    val pivot @dep_on(start, stop) -> Math.floor (start + stop) / 2
-
-    _1.2._ Loop over items.
-    loop
-    loop.cond -> items[pivot] isnt value
-    loop.cond -> start < stop
-    loop.proc do
-        case items[pivot] `compare` value
-        when LT -> stop  = pivot - 1
-        when GT -> start = pivot + 1
-        when EQ -> break
-    end
+    loop:
+        init:
+            start = 0, stop = items.length - 1
+            pivot @dep_on(start, stop) -> Math.floor (start + stop) / 2
+        cond:
+            _1_ -> items[pivot] isnt value
+            _&_
+            _2_ -> start < stop
+        proc:
+            case items[pivot] `compare` value
+            when LT -> stop  = pivot - 1
+            when GT -> start = pivot + 1
+            when EQ -> break
+    loop.eval
 
     return pivot
+
+
+# Test the function.
+console.log  2 is binary_search [10, 20, 30, 40, 50], 30
+console.log  4 is binary_search [-97, 35, 67, 88, 1200], 1200
+console.log  0 is binary_search [0, 45, 70], 0
+console.log -1 is binary_search [0, 45, 70], 10
 
 __END__
 
@@ -31,6 +38,15 @@ __END__
 * 写一个完美的二分查找，并在代码层面表达出二分查找的核心思想。
 * Changeable = val
 * 任意上下文 扁平式
+* loop 是一个 Context。尽量所有都是Context，并且是惰性和可自省的。
+* 进入一个上下文时，必须把关联对象的特性尽可能局限到当下这个上下文的情境中来。
+* 序号表示顺序和层次。
+* _序号_ 是一个关于序号的 **表达式** ，实际上也类似于传统的用括号来表示优先级。=> 结构化编程。
+* 多层复杂逻辑 [或与非] 应该用序号来表示。
+* loop 的判断跳出是可以在cond或proc都可以做的，因为变量在这两个里是共享的，我们讨论时也是如此。
+* 程序里任何的不清晰都是一种罪过啊。
+
+* 二分查找的主体是递归循环，并更改状态。
 
 * [传统] 缺陷是 从start, stop 到 pivot 里包含的 <, >, 还有另一个隐含的 = ，得靠推理出来。
 * [传统] 没有显式表达出[start, stop, pivot]的依赖, 和循环对之的影响。
@@ -39,3 +55,4 @@ __END__
 * @dep_on 表示在相关任意元素改变时，该元素也跟着改变。
 
 
+* 代码首先是执行正确的才考虑美感，就像菜首先得可口才考虑美感。
