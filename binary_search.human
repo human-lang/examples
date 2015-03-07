@@ -8,7 +8,7 @@ Context binary_search_iterate(items as SortedArray, value as Object) :: Index or
         cond:
             start < stop
         proc:
-            case items[pivot] `compare` value
+            case items[pivot] <=> value
             when LT -> stop  = pivot - 1
             when GT -> start = pivot + 1
             when EQ -> break
@@ -31,7 +31,7 @@ Context binary_search_recusive(items as SortedArray, value as Object, \
 
     @doc"改变状态，开始递归执行"
     _2_:
-        case items[pivot] `compare` value
+        case items[pivot] <=> value
         when LT -> @recusive(items, value, start, pivot - 1)
         when GT -> @recusive(items, value, pivot + 1, stop)
         when EQ -> return pivot
@@ -77,6 +77,7 @@ __END__
 * 用 @recusive 来强制显示表示这是一个递归函数。写出自己名字也可以，但是可以警告吧。
 * 在 case when 里，如果用 !> 替换了 -> ，则表示这个判断是直接返回值的。
 * 如果 loop 结构里没有 result: ，则默认返回 init 里的最后一个值。
+* `compare` 用 <=> 符号表示，恰恰符合 比较操作一定会返回 <=> 其中一个。
 
 * 二分查找的主体是递归循环，并更改状态。
 
