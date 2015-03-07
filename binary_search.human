@@ -34,7 +34,7 @@ Context binary_search_recusive(items as SortedArray, value as Object, \
         case items[pivot] `compare` value
         when LT -> @recusive(items, value, start, pivot - 1)
         when GT -> @recusive(items, value, pivot + 1, stop)
-        when EQ -> pivot
+        when EQ -> return pivot
 
 
 binary_search = binary_search_iterate
@@ -76,6 +76,7 @@ __END__
 * $= 表示依赖求值。接受参数和函数，一旦参数发生变化，则下次调用时重新求职。
 * 用 @recusive 来强制显示表示这是一个递归函数。写出自己名字也可以，但是可以警告吧。
 * 在 case when 里，如果用 !> 替换了 -> ，则表示这个判断是直接返回值的。
+* 如果 loop 结构里没有 result: ，则默认返回 init 里的最后一个值。
 
 * 二分查找的主体是递归循环，并更改状态。
 
