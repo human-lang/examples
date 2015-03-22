@@ -1,0 +1,147 @@
+##
+  Notice: below Ruby code and most of the docs are copied from https://github.com/jashkenas/coffeescript/blob/master/examples/poignant.coffee
+
+  Examples from the Poignant Guide.
+  These are examples of syntax differences between Human and Ruby,
+  they won't run.
+
+  ['toast', 'cheese', 'wine'].each { |food| print food.capitalize }
+
+['toast', 'wine', 'cheese'] |> print.(`_.capitalize.).
+
+
+##
+  class LotteryTicket
+    def picks;           @picks;            end
+    def picks=(var);     @picks = var;      end
+    def purchased;       @purchased;        end
+    def purchased=(var); @purchased = var;  end
+  end
+
+$LotteryTicket:
+  picks:
+  purchased:
+
+
+##
+  class << LotteryDraw
+    def play
+      result = LotteryTicket.new_random
+      winners = {}
+      @@tickets.each do |buyer, ticket_list|
+        ticket_list.each do |ticket|
+          score = ticket.score( result )
+          next if score.zero?
+          winners[buyer] ||= []
+          winners[buyer] << [ ticket, score ]
+        end
+      end
+      @@tickets.clear
+      winners
+    end
+  end
+
+
+$LotteryTicket(~plural: LotteryTickets):            # "~" means builtin property.
+  num:
+  $Buyer:                                           # A new Data Context in $LotteryTicket
+    name:
+
+($LotteryTicket, :tickets): ->                      # 组合模式。"%" 符号和 参数抽取 对应。"[]" 表示参数顺序。
+  100.$LotteryTickets(num: &Math.random.)           # 加 "&" 表示每次对 Math.random 调用都都执行一遍。
+
+%%                                                  # 另一种组合模式。用于多重组合。
+  $LotteryTicket:
+    new_random: ->
+      Math.random.
+
+@LotteryDraw:                                       # @表示函数。这边的 # 可以表示水平对称的文档。
+  play:                                             # @LotteryDraw 上下文 里的函数名称, :play 是可以 symbol, Equals to  play: 。
+    ##
+      Draw a lottery, lol.
+    #1 init env
+      tickets = $LotteryTicket.tickets.
+      result  = $LotteryTicket.new_random.
+      winners = 1.Dict(default:[])                  # 返回值必须声明类型，用户应该尽量知道结构，而不是去推敲。
+    #2 loop and get the valid tickets
+      tickets % (buyer, ticket_list) |>             # 字典默认 loop 单元就是 k, v 两个。列表就一个。
+        ticket_list % ticket |>
+          score = ticket.score(result)
+          next if score.zero?
+          winners[buyer] << [ticket, score]
+      tickets.clear.
+    #3 result
+      winners
+
+##
+  module WishScanner
+    def scan_for_a_wish
+      wish = self.read.detect do |thought|
+        thought.index( 'wish: ' ) == 0
+      end
+      wish.gsub( 'wish: ', '' )
+    end
+  end
+
+@WishScanner:
+  scan_for_a_wish: ->
+    wish:                                           # "wish" 来自于下方遍历最终得到的值。
+      (*.read.).detect &> ->                        # "*" 暂时表示自身，有聚集，指针等意指。"&>" 表示选择管道, "|>" 表示直接管道, "!>" 表示过滤管道。
+        `thought.index("wish: "). == 0              # "`thought" 参数默认会从父级上下文找，当父级是会输出一个迭代对象，但是却没有定义，那么默认就用父级的。
+    wish.gsub("wish: ", "").                        # 如何保证 wish 一定有值呢，这里是字符串。
+
+
+
+##
+  # Get evil idea and swap in code words
+  print "Enter your new idea: "
+  idea = gets
+  code_words.each do |real, code|
+    idea.gsub!( real, code )
+  end
+
+  # Save the jibberish to a new file
+  print "File encoded.  Please enter a name for this idea: "
+  idea_name = gets.strip
+  File::open( "idea-" + idea_name + ".txt", "w" ) do |f|
+    f << idea
+  end
+
+## Get evil idea and swap in code words
+print."Enter your new idea: ".
+idea = console.gets.
+code_words % (real, code) |>
+  `idea.gsub!(`real, `code).
+
+## Save the jibberish to a new file
+print."File encoded.  Please enter a name for this idea: ".
+idea_name = (console.gets.).strip.
+1.File("idea-" + idea_name + ".txt", "w"). << `idea
+
+
+##
+  def wipe_mutterings_from( sentence )
+    unless sentence.respond_to? :include?
+      raise ArgumentError,
+        "cannot wipe mutterings from a #{ sentence.class }"
+    end
+    while sentence.include? '('
+      open = sentence.index( '(' )
+      close = sentence.index( ')', open )
+      sentence[open..close] = '' if close
+    end
+  end
+
+
+## The requirements is keeping the sentence string pruning.
+wipe_mutterings_from(sentence): ->                                         # 此处隐含着 sentence 得是一个 String 类型的。
+  unless iscombined(sentence, :index):
+    throw 1.Error("cannot wipe mutterings").
+
+  while "C" in sentence:                                                   # Equals to  "C".in.`sentence. 。
+    open     = `sentence.index('(').
+    close    = `sentence.index(')').
+    sentence = "#{sentence[1...open]}#{sentence[close + 1..]}"             # Equals to  `sentence.[].(1...open). 。Index is start from zero in Human Promgramming language.
+    sentence                                                               # Equals to  1.(...).`open. and (`close.+.1).(..).
+
+# TODO Maybe we use "%%" symbol to iterate a sentence by a matching template.
