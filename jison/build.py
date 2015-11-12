@@ -24,5 +24,5 @@ unittest("simple", json.loads("""{"value": null, "class": "Week"}"""))
 string_json = """{"value": "Human Programming Language", "class": "String"}"""
 unittest("string_basic", json.loads(string_json))
 
-book_json = """{"value": {"name": "逻辑哲学论", "author": "维特根斯坦"}, "class": "Book"}"""
-# unittest("class", json.loads(book_json))
+book_json = """{"value": {"name": "Human Programming Language", "author": "David Chen"}, "class": "Book"}"""
+unittest("class", json.loads(book_json))
