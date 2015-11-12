@@ -27,14 +27,14 @@ Context binary_search_recusive(items as SortedArray, value as Object, \
         start ?= 0
         stop  ?= items.length - 1
         pivot $= Math.floor (`start + `stop) / 2
-        if start > stop: return Nothing
+        if start > stop: @return Nothing
 
     @doc"改变状态，开始递归执行"
     _2_:
         case items[pivot] <=> value
         when LT -> @recusive(items, value, start, pivot - 1)
         when GT -> @recusive(items, value, pivot + 1, stop)
-        when EQ -> return pivot
+        when EQ -> @return pivot
 
 
 binary_search = binary_search_iterate
