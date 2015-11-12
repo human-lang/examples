@@ -15,14 +15,14 @@ def unittest(case, expected_result):
     status, run_result = commands.getstatusoutput("node human.js " + unittest_filename)
 
     if status is 0:
-        assert json.loads(run_result) == expected_result, [run_result == expected_result]
+        assert json.loads(run_result) == expected_result, [run_result, json.dumps(expected_result)]
     else:
         print run_result
 
 unittest("simple", json.loads("""{"value": null, "class": "Week"}"""))
 
 string_json = """{"value": "Human Programming Language", "class": "String"}"""
-# unittest("string_basic", json.loads(string_json))
+unittest("string_basic", json.loads(string_json))
 
 book_json = """{"value": {"name": "逻辑哲学论", "author": "维特根斯坦"}, "class": "Book"}"""
 # unittest("class", json.loads(book_json))

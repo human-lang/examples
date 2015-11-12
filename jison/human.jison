@@ -12,6 +12,7 @@
 \:                    return 'COLON'
 [0-9]+                return 'NUMBER'
 [A-Z][a-z]*           return 'CLASS'
+\"[A-Za-z\ ]*\"       return 'STRING'             /* only support simple form currently */
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -23,12 +24,12 @@
 %% /* language grammar */
 
 expressions:
-    statements EOF
-    {
-      console.log(JSON.stringify($1));
-      return $1;
-    }
-    ;
+  statements EOF
+  {
+    console.log(JSON.stringify($1));
+    return $1;
+  }
+  ;
 
 
 statements:
@@ -45,20 +46,33 @@ statements:
 
 
 statement:
+  instantiate_string
+  |
   define_class
   |
   instantiate_class
   ;
 
 
-define_class:
-    DOLLAR CLASS COLON
-    {
-      global.class_definitions = global.class_definitions || {};
-      global.class_definitions[$2] = {};
-      $$ = global.class_definitions;
+instantiate_string:
+  STRING DOT
+  {
+    $$ = {
+      value: $1.slice(1, $1.length - 1),
+      class: "String"
     }
-    ;
+  }
+  ;
+
+
+define_class:
+  DOLLAR CLASS COLON
+  {
+    global.class_definitions = global.class_definitions || {};
+    global.class_definitions[$2] = {};
+    $$ = global.class_definitions;
+  }
+  ;
 
 
 instantiate_class:
