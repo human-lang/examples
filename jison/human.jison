@@ -65,10 +65,15 @@ instantiate_class:
   NUMBER DOT CLASS DOT
   {
     if ($3 in global.class_definitions) {
-      $$ = {
-        count: parseInt($1),
-        class: $3
+      if ($1 == 1) {
+        $$ = {
+          value: null,
+          class: $3
+        }
+      } else {
+        throw Error("Array hasn't be implemented!");
       }
+
     } else {
       throw Error("undefined class \"" + $3 + "\", maybe you want to use one of classes " +
                   JSON.stringify(Object.keys(global.class_definitions)) + " ...");

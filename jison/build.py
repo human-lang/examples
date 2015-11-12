@@ -19,7 +19,10 @@ def unittest(case, expected_result):
     else:
         print run_result
 
-unittest("simple", json.loads("""{"value": null, "class": 'Week'}""")
+unittest("simple", json.loads("""{"value": null, "class": "Week"}"""))
 
-# unittest("string_basic", json.loads("""{"value": "Human Programming Language", "class": "String"}"""))
-# unittest("class", json.loads("""{"value": {"name": "逻辑哲学论", "author": "维特根斯坦"}, "class": "Book"}"""))
+string_json = """{"value": "Human Programming Language", "class": "String"}"""
+# unittest("string_basic", json.loads(string_json))
+
+book_json = """{"value": {"name": "逻辑哲学论", "author": "维特根斯坦"}, "class": "Book"}"""
+# unittest("class", json.loads(book_json))
