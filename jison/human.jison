@@ -9,7 +9,7 @@
 \n                    return 'NEWLINE'
 \.                    return 'DOT'
 [0-9]+                return 'NUMBER'
-"People"              return 'PEOPLE'
+[A-Z][a-z]*           return 'CLASS'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -27,7 +27,7 @@ expressions : instantiate_a_data_structure EOF
     }
     ;
 
-instantiate_a_data_structure: NUMBER DOT PEOPLE DOT
+instantiate_a_data_structure: NUMBER DOT CLASS DOT
   {
     $$ = {
       count: parseInt($1),
