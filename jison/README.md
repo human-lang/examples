@@ -7,5 +7,7 @@ Run & tests
 ----------------------------------------
 ```bash
 npm install jison -g
-jison human.jison && node human.js expr.human
+jison human.jison && node human.js simple.human
+# or
+./build.py
 ```

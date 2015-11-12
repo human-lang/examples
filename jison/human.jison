@@ -25,8 +25,7 @@
 expressions:
     statements EOF
     {
-      console.log("# Current Class definitions: =>", global.class_definitions, "\n");
-      console.log($1);
+      console.log(JSON.stringify($1));
       return $1;
     }
     ;
