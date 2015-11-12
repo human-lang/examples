@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*-coding:utf-8-*-
 
 import os
 import commands
@@ -18,4 +19,7 @@ def unittest(case, expected_result):
     else:
         print run_result
 
-unittest("simple", {"count": 3, "class": 'Week'})
+unittest("simple", json.loads("""{"value": null, "class": 'Week'}""")
+
+# unittest("string_basic", json.loads("""{"value": "Human Programming Language", "class": "String"}"""))
+# unittest("class", json.loads("""{"value": {"name": "逻辑哲学论", "author": "维特根斯坦"}, "class": "Book"}"""))
