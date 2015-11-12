@@ -8,6 +8,8 @@
 \s+                   /* skip whitespace */
 \n                    return 'NEWLINE'
 \.                    return 'DOT'
+\$                    return 'DOLLAR'
+\:                    return 'COLON'
 [0-9]+                return 'NUMBER'
 [A-Z][a-z]*           return 'CLASS'
 <<EOF>>               return 'EOF'
@@ -20,18 +22,52 @@
 
 %% /* language grammar */
 
-expressions : instantiate_a_data_structure EOF
+expressions:
+    statements EOF
     {
+      console.log("# Current Class definitions: =>", global.class_definitions, "\n");
       console.log($1);
       return $1;
     }
     ;
 
-instantiate_a_data_structure: NUMBER DOT CLASS DOT
+
+statements:
+  statement
+  {
+    $$ = $1;
+  }
+  |
+  statement statements
+  {
+    $$ = $2;
+  }
+  ;
+
+
+statement:
+  define_class
+  |
+  instantiate_class
+  ;
+
+
+define_class:
+    DOLLAR CLASS COLON
+    {
+      global.class_definitions = global.class_definitions || {};
+      global.class_definitions[$2] = {};
+      $$ = global.class_definitions;
+    }
+    ;
+
+
+instantiate_class:
+  NUMBER DOT CLASS DOT
   {
     $$ = {
       count: parseInt($1),
-      name: $3
+      class: $3
     }
   }
   ;
